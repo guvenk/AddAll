@@ -75,7 +75,6 @@ namespace AddAll
         private static IEnumerable<KeyValuePair<Type, Type>> GetAllTypes(
             IEnumerable<Assembly> assemblies)
         {
-            var types = new List<KeyValuePair<Type, Type>>();
             foreach (var assembly in assemblies)
             {
                 var interfaceTypes = assembly
