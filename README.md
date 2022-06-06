@@ -12,21 +12,17 @@ Automates registration of all services in your solution.
 
 
 
-### Sample Usage:
+### Example Usage:
 ```csharp
 
 services.AddAllAsTransient();
 services.AddAllAsTransient(options =>
 {
     options.PrefixAssemblyName = "Prefix";
-    options.ExcludedTypes = new List<Type> { typeof(IMyService) };
-});
-
-services.TryAddAllAsTransient();
-services.TryAddAllAsTransient(options =>
-{
-    options.PrefixAssemblyName = "Prefix";
-    options.ExcludedTypes = new List<Type> { typeof(IMyService) };
+    options.IncludedTypes = new List<Type> { typeof(IMyService) };
+    options.ExcludedTypes = new List<Type> { typeof(IMyOtherService) };
+    options.IncludedAssemblies = new List<Assembly> { someAssembly };
+    options.ExcludedAssemblies = new List<Assembly> { otherAssembly };
 });
 
 ```
@@ -34,10 +30,6 @@ services.TryAddAllAsTransient(options =>
 ### Where can I get it?
 
 First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [AddAll](https://www.nuget.org/packages/AddAll/) from the package manager console
-
-```
-PM> Install-Package AddAll
-```
 
 
 ---

@@ -13,30 +13,22 @@ namespace AddAll
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            // Get Entry Assembly
-            var entryAssembly = Assembly.GetEntryAssembly();
+            var otherAssembly = Assembly.GetEntryAssembly();
             var someAssembly = Assembly.GetAssembly(typeof(ICustomAttributeProvider));
 
             services.AddAllAsTransient();
             services.AddAllAsTransient(options =>
             {
                 options.PrefixAssemblyName = "Prefix";
-                options.IncludedTypes = new List<Type> { typeof(IMyService) };
-                options.ExcludedTypes = new List<Type> { typeof(IMyService) };
-                options.ExcludedAssemblies = new List<Assembly> { entryAssembly };
+                options.IncludedTypes = new List<Type> { typeof(ISomeService) };
+                options.ExcludedTypes = new List<Type> { typeof(IOtherService) };
                 options.IncludedAssemblies = new List<Assembly> { someAssembly };
+                options.ExcludedAssemblies = new List<Assembly> { otherAssembly };
             });
-
-            services.TryAddAllAsTransient();
-            services.TryAddAllAsTransient(options =>
-            {
-                options.PrefixAssemblyName = "Prefix";
-                options.ExcludedTypes = new List<Type> { typeof(IMyService) };
-            });
-
         }
 
-        interface IMyService { }
+        interface ISomeService { }
+        interface IOtherService { }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
