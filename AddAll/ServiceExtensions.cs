@@ -56,8 +56,7 @@ namespace AddAll
             var entryAssembly = Assembly.GetEntryAssembly();
             if (string.IsNullOrEmpty(prefix))
             {
-                var name = entryAssembly.FullName.Split(_separators).First();
-                prefix = name;
+                prefix = entryAssembly.FullName.Split(_separators).First();
             }
 
             var assemblies = entryAssembly
@@ -67,6 +66,12 @@ namespace AddAll
                 .Where(x => !options.ExcludedAssemblies.Contains(x))
                 .ToList();
 
+            if (!options.ExcludedAssemblies.Contains(entryAssembly)
+                && entryAssembly.GetName().Name.StartsWith(prefix))
+            {
+                assemblies.Add(entryAssembly);
+            }
+
             if (options.IncludedAssemblies.Count > 0)
             {
                 assemblies = assemblies
@@ -74,7 +79,6 @@ namespace AddAll
                     .ToList();
             }
 
-            assemblies.Add(entryAssembly);
             return assemblies;
         }
 

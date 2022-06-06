@@ -27,11 +27,6 @@ services.AddAllAsTransient(options =>
 
 ```
 
-### Where can I get it?
-
-First, [install NuGet](http://docs.nuget.org/docs/start-here/installing-nuget). Then, install [AddAll](https://www.nuget.org/packages/AddAll/) from the package manager console
-
-
 ---
 **Contact**
 
