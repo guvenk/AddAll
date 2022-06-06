@@ -2,6 +2,10 @@
 ### What is AddAll?
 Automates registration of all services in your solution.
 
+### How does it work internally?
+It scans all the assemblies in your solution and registers all the services found.
+By default it will take the entry assembly and take the name until the first dot(.) comma(,) or hyphen(-) 
+and use it as a prefix to find all assemblies in your solution.
 
 ### Sample Usage:
 ```csharp
