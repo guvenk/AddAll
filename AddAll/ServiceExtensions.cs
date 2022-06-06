@@ -9,18 +9,13 @@ namespace AddAll
 {
     public static class ServiceExtensions
     {
+        private static readonly char[] _separators = new[] { '.', '-', ' ' };
+
         public static IServiceCollection AddAllAsTransient(
             this IServiceCollection services,
             Action<AddAllOptions> setupAction = null)
         {
-            var config = new AddAllOptions();
-            setupAction?.Invoke(config);
-
-            var assemblies = FindAssemblies(config.PrefixAssemblyName);
-
-            var typesToRegister = GetAllTypes(assemblies);
-
-            typesToRegister = typesToRegister.Where(x => !config.ExcludedTypes.Contains(x.Key));
+            var typesToRegister = GetTypesToRegister(setupAction);
 
             foreach (var typePair in typesToRegister)
             {
@@ -34,16 +29,7 @@ namespace AddAll
            this IServiceCollection services,
            Action<AddAllOptions> setupAction = null)
         {
-            var config = new AddAllOptions();
-            setupAction?.Invoke(config);
-
-            var assemblies = FindAssemblies(config.PrefixAssemblyName);
-
-            var typesToRegister = GetAllTypes(assemblies);
-
-            typesToRegister = typesToRegister.Where(x => !config.ExcludedTypes.Contains(x.Key));
-
-
+            var typesToRegister = GetTypesToRegister(setupAction);
 
             foreach (var typePair in typesToRegister)
             {
@@ -53,12 +39,24 @@ namespace AddAll
             return services;
         }
 
-        private static IEnumerable<Assembly> FindAssemblies(string prefix = "")
+        private static IList<KeyValuePair<Type, Type>> GetTypesToRegister(Action<AddAllOptions> setupAction)
         {
+            var options = new AddAllOptions();
+            setupAction?.Invoke(options);
+
+            var assemblies = GetAssemblies(options);
+            var typesToRegister = GetAllServices(options, assemblies);
+
+            return typesToRegister;
+        }
+
+        private static IList<Assembly> GetAssemblies(AddAllOptions options)
+        {
+            var prefix = options.PrefixAssemblyName;
             var entryAssembly = Assembly.GetEntryAssembly();
             if (string.IsNullOrEmpty(prefix))
             {
-                var name = entryAssembly.FullName.Split(new[] { '.', '-', ' ' }).First();
+                var name = entryAssembly.FullName.Split(_separators).First();
                 prefix = name;
             }
 
@@ -66,33 +64,51 @@ namespace AddAll
                 .GetReferencedAssemblies()
                 .Where(x => x.Name.StartsWith(prefix))
                 .Select(x => Assembly.Load(x))
+                .Where(x => !options.ExcludedAssemblies.Contains(x))
                 .ToList();
+
+            if (options.IncludedAssemblies.Count > 0)
+            {
+                assemblies = assemblies
+                    .Where(x => options.IncludedAssemblies.Contains(x))
+                    .ToList();
+            }
 
             assemblies.Add(entryAssembly);
             return assemblies;
         }
 
-        private static IEnumerable<KeyValuePair<Type, Type>> GetAllTypes(
-            IEnumerable<Assembly> assemblies)
+        private static IList<KeyValuePair<Type, Type>> GetAllServices(
+            AddAllOptions options,
+            IList<Assembly> assemblies)
         {
+            var services = new List<KeyValuePair<Type, Type>>();
             foreach (var assembly in assemblies)
             {
                 var interfaceTypes = assembly
                     .GetTypes()
                     .Where(x => x.IsInterface)
-                    .ToList();
+                    .Where(x => !options.ExcludedTypes.Contains(x)).ToList();
+
+                if (options.IncludedTypes.Count > 0)
+                {
+                    interfaceTypes = interfaceTypes
+                        .Where(x => options.IncludedTypes.Contains(x))
+                        .ToList();
+                }
 
                 foreach (var serviceType in interfaceTypes)
                 {
-                    var implementationTypes = GetImplementationsOfInterface(assembly, serviceType)
-                        .ToList();
+                    var implementationTypes = GetImplementationsOfInterface(assembly, serviceType);
 
                     foreach (var implementationType in implementationTypes)
                     {
-                        yield return new KeyValuePair<Type, Type>(serviceType, implementationType);
+                        services.Add(new KeyValuePair<Type, Type>(serviceType, implementationType));
                     }
                 }
             }
+
+            return services;
         }
 
         private static IEnumerable<Type> GetImplementationsOfInterface(Assembly assembly, Type serviceType)
@@ -104,5 +120,4 @@ namespace AddAll
                 && !type.IsAbstract);
         }
     }
-
 }

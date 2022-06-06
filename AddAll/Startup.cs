@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace AddAll
 {
@@ -12,11 +13,18 @@ namespace AddAll
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            // Get Entry Assembly
+            var entryAssembly = Assembly.GetEntryAssembly();
+            var someAssembly = Assembly.GetAssembly(typeof(ICustomAttributeProvider));
+
             services.AddAllAsTransient();
             services.AddAllAsTransient(options =>
             {
                 options.PrefixAssemblyName = "Prefix";
+                options.IncludedTypes = new List<Type> { typeof(IMyService) };
                 options.ExcludedTypes = new List<Type> { typeof(IMyService) };
+                options.ExcludedAssemblies = new List<Assembly> { entryAssembly };
+                options.IncludedAssemblies = new List<Assembly> { someAssembly };
             });
 
             services.TryAddAllAsTransient();
