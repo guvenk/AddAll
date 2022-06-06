@@ -11,6 +11,7 @@
 		<PackageTags>di;ioc;dependencyinjection;aspnet;aspnetcore</PackageTags>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>icon.png</PackageIcon>
+		<RepositoryUrl>https://github.com/guvenk/AddAll</RepositoryUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,7 +24,4 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
-
-
-
 </Project>
