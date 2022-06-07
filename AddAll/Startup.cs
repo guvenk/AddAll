@@ -15,21 +15,23 @@ namespace AddAll
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient<IMyService, MyService>();
+
             var entryAssembly = Assembly.GetEntryAssembly();
             var testAssembly = Assembly.GetAssembly(typeof(ITestService));
 
             //services.AddAllAsTransient(options =>
             //{
             //    options.PrefixAssemblyName = "AddAll";
-            //    options.IncludedTypes = new List<Type> { typeof(IService) };
-            //    options.ExcludedTypes = new List<Type> { typeof(IOtherService) };
+            //    options.IncludedTypes = new List<Type> { typeof(IMyService2) };
+            //    options.ExcludedTypes = new List<Type> { typeof(IMyService2) };
             //    options.IncludedAssemblies = new List<Assembly> { testAssembly };
             //    options.ExcludedAssemblies = new List<Assembly> { entryAssembly };
             //});
 
-            services.AddHttpClient<IMyService, MyService>();
 
             services.AddAllAsTransient();
+
 
             var test1 = services
                 .Where(x => x.ServiceType == typeof(ITestService))
