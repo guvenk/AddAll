@@ -7,17 +7,17 @@ using System.Reflection;
 
 namespace AddAll
 {
-    public static class ServiceExtensions
+    public static class ServicesExtensions
     {
-        private static readonly char[] _separators = new[] { '.', '-', ' ' };
+        private static readonly char[] _separators = new[] { '.', ',', '-', ' ' };
 
         public static IServiceCollection AddAllAsTransient(
             this IServiceCollection services,
             Action<AddAllOptions> setupAction = null)
         {
-            var typesToRegister = GetTypesToRegister(setupAction);
+            var typePairs = GetFilteredTypePairs(services, setupAction);
 
-            foreach (var typePair in typesToRegister)
+            foreach (var typePair in typePairs)
             {
                 services.AddTransient(typePair.Key, typePair.Value);
             }
@@ -29,9 +29,9 @@ namespace AddAll
            this IServiceCollection services,
            Action<AddAllOptions> setupAction = null)
         {
-            var typesToRegister = GetTypesToRegister(setupAction);
+            var typePairs = GetFilteredTypePairs(services, setupAction);
 
-            foreach (var typePair in typesToRegister)
+            foreach (var typePair in typePairs)
             {
                 services.TryAddTransient(typePair.Key, typePair.Value);
             }
@@ -39,11 +39,29 @@ namespace AddAll
             return services;
         }
 
-        private static IList<KeyValuePair<Type, Type>> GetTypesToRegister(Action<AddAllOptions> setupAction)
+        private static IList<KeyValuePair<Type, Type>> GetFilteredTypePairs(
+            IServiceCollection services,
+            Action<AddAllOptions> setupAction)
         {
             var options = new AddAllOptions();
             setupAction?.Invoke(options);
 
+            var typesToRegister = GetTypesToRegister(options);
+
+            var httpClientServices = services.Where(x =>
+                x.ImplementationType is null &&
+                x.ImplementationFactory != null)
+                .Select(x => x.ServiceType)
+                .ToList();
+
+            typesToRegister = typesToRegister.Where(x => !httpClientServices.Contains(x.Key)).ToList();
+
+            return typesToRegister;
+        }
+
+
+        private static IList<KeyValuePair<Type, Type>> GetTypesToRegister(AddAllOptions options)
+        {
             var assemblies = GetAssemblies(options);
             var typesToRegister = GetAllServices(options, assemblies);
 
@@ -92,7 +110,8 @@ namespace AddAll
                 var interfaceTypes = assembly
                     .GetTypes()
                     .Where(x => x.IsInterface)
-                    .Where(x => !options.ExcludedTypes.Contains(x)).ToList();
+                    .Where(x => !options.ExcludedTypes.Contains(x))
+                    .ToList();
 
                 if (options.IncludedTypes.Count > 0)
                 {

@@ -19,8 +19,8 @@ services.AddAllAsTransient();
 services.AddAllAsTransient(options =>
 {
     options.PrefixAssemblyName = "Prefix";
-    options.IncludedTypes = new List<Type> { typeof(IMyService) };
-    options.ExcludedTypes = new List<Type> { typeof(IMyOtherService) };
+    options.IncludedTypes = new List<Type> { typeof(IService) };
+    options.ExcludedTypes = new List<Type> { typeof(IOtherService) };
     options.IncludedAssemblies = new List<Assembly> { someAssembly };
     options.ExcludedAssemblies = new List<Assembly> { otherAssembly };
 });

@@ -6,8 +6,8 @@
 		<Title>AddAll</Title>
 		<Authors>guvenkurt</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.1</Version>
-		<Description>Automates services registrations of your solution.</Description>
+		<Version>1.0.3</Version>
+		<Description>Automates service registrations of your solution.</Description>
 		<PackageTags>di;ioc;dependencyinjection;aspnet;aspnetcore</PackageTags>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>icon.png</PackageIcon>
@@ -23,5 +23,9 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\AddAll.TestLibrary\AddAll.TestLibrary.csproj" />
 	</ItemGroup>
 </Project>
