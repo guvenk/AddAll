@@ -25,7 +25,10 @@ services.AddAllAsTransient(options =>
     options.ExcludedAssemblies = new List<Assembly> { otherAssembly };
 });
 
+services.TryAddAllAsTransient();
 ```
+
+> **_NOTE:_**  Any exclusion takes priority over inclusion.
 
 ---
 **Contact**

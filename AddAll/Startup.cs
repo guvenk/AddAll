@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using AddAll.TestLibrary;
+//using AddAll.TestLibrary;
 
 namespace AddAll
 {
@@ -18,7 +18,7 @@ namespace AddAll
             services.AddHttpClient<IMyService, MyService>();
 
             var entryAssembly = Assembly.GetEntryAssembly();
-            var testAssembly = Assembly.GetAssembly(typeof(ITestService));
+            //var testAssembly = Assembly.GetAssembly(typeof(ITestService));
 
             //services.AddAllAsTransient(options =>
             //{
@@ -28,17 +28,17 @@ namespace AddAll
             //    options.IncludedAssemblies = new List<Assembly> { testAssembly };
             //    options.ExcludedAssemblies = new List<Assembly> { entryAssembly };
             //});
-
+            services.TryAddAllAsTransient();
 
             services.AddAllAsTransient();
 
 
-            var test1 = services
-                .Where(x => x.ServiceType == typeof(ITestService))
-                .Count();
-            var test2 = services
-                .Where(x => x.ServiceType == typeof(IOtherTestService))
-                .Count();
+            //var test1 = services
+            //    .Where(x => x.ServiceType == typeof(ITestService))
+            //    .Count();
+            //var test2 = services
+            //    .Where(x => x.ServiceType == typeof(IOtherTestService))
+            //    .Count();
             var test3 = services
                 .Where(x => x.ServiceType == typeof(IMyService))
                 .Count();
