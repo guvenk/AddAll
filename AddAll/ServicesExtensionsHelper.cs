@@ -19,13 +19,14 @@ namespace AddAll
 
             var typesToRegister = GetTypesToRegister(options);
 
-            var httpClientServices = services.Where(x =>
+            var servicesToExclude = services.Where(x =>
                 x.ImplementationType is null &&
                 x.ImplementationFactory != null)
                 .Select(x => x.ServiceType)
                 .ToList();
 
-            typesToRegister = typesToRegister.Where(x => !httpClientServices.Contains(x.Key)).ToList();
+            // We exclude the services which has implementation factory instead of implementation type
+            typesToRegister = typesToRegister.Where(x => !servicesToExclude.Contains(x.Key)).ToList();
 
             return typesToRegister;
         }
@@ -36,40 +37,6 @@ namespace AddAll
             var typesToRegister = GetAllServices(options, assemblies);
 
             return typesToRegister;
-        }
-
-        private static IList<KeyValuePair<Type, Type>> GetAllServices(
-            AddAllOptions options,
-            IList<Assembly> assemblies)
-        {
-            var services = new List<KeyValuePair<Type, Type>>();
-            foreach (var assembly in assemblies)
-            {
-                var interfaceTypes = assembly
-                    .GetTypes()
-                    .Where(x => x.IsInterface)
-                    .Where(x => !options.ExcludedTypes.Contains(x))
-                    .ToList();
-
-                if (options.IncludedTypes.Count > 0)
-                {
-                    interfaceTypes = interfaceTypes
-                        .Where(x => options.IncludedTypes.Contains(x))
-                        .ToList();
-                }
-
-                foreach (var serviceType in interfaceTypes)
-                {
-                    var implementationTypes = GetImplementationsOfInterface(assembly, serviceType);
-
-                    foreach (var implementationType in implementationTypes)
-                    {
-                        services.Add(new KeyValuePair<Type, Type>(serviceType, implementationType));
-                    }
-                }
-            }
-
-            return services;
         }
 
         private static IList<Assembly> GetAssemblies(AddAllOptions options)
@@ -102,6 +69,40 @@ namespace AddAll
             }
 
             return assemblies;
+        }
+
+        private static IList<KeyValuePair<Type, Type>> GetAllServices(
+           AddAllOptions options,
+           IList<Assembly> assemblies)
+        {
+            var services = new List<KeyValuePair<Type, Type>>();
+            foreach (var assembly in assemblies)
+            {
+                var interfaceTypes = assembly
+                    .GetTypes()
+                    .Where(x => x.IsInterface)
+                    .Where(x => !options.ExcludedTypes.Contains(x))
+                    .ToList();
+
+                if (options.IncludedTypes.Count > 0)
+                {
+                    interfaceTypes = interfaceTypes
+                        .Where(x => options.IncludedTypes.Contains(x))
+                        .ToList();
+                }
+
+                foreach (var serviceType in interfaceTypes)
+                {
+                    var implementationTypes = GetImplementationsOfInterface(assembly, serviceType);
+
+                    foreach (var implementationType in implementationTypes)
+                    {
+                        services.Add(new KeyValuePair<Type, Type>(serviceType, implementationType));
+                    }
+                }
+            }
+
+            return services;
         }
 
         private static IEnumerable<Type> GetImplementationsOfInterface(Assembly assembly, Type serviceType)
