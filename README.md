@@ -28,7 +28,8 @@ services.AddAllAsTransient(options =>
 services.TryAddAllAsTransient();
 ```
 
-> **_NOTE:_**  Any exclusion takes priority over inclusion.
+- Any exclusion takes priority over inclusion.
+- When you use _"Included"_ properties it works as include **only**
 
 ---
 **Contact**
