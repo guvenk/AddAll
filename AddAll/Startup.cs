@@ -47,7 +47,6 @@ namespace AddAll
                .Where(x => x.ServiceType == typeof(IMyService2))
                .Count();
 
-            var abc = 123;
         }
 
         interface IMyService { }
