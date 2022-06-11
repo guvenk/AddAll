@@ -7,7 +7,7 @@
 		<Title>AddAll</Title>
 		<Authors>guvenkurt</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.8</Version>
+		<Version>1.0.9</Version>
 		<Description>Automates service registrations of your solution.</Description>
 		<PackageTags>di;ioc;dependencyinjection;aspnet;aspnetcore</PackageTags>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -19,6 +19,7 @@
 		<None Include="..\README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Include="icon.png">
 			<Pack>True</Pack>
