@@ -5,7 +5,12 @@ VisualStudioVersion = 17.3.32519.111
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddAll", "AddAll\AddAll.csproj", "{22ECC94D-B310-4B89-AB14-2A9085BCDB66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddAll.TestLibrary", "AddAll.TestLibrary\AddAll.TestLibrary.csproj", "{83E72A69-17FA-44C5-AAC3-DB9E7875CF3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AddAll.TestLibrary", "AddAll.TestLibrary\AddAll.TestLibrary.csproj", "{83E72A69-17FA-44C5-AAC3-DB9E7875CF3F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F76A9629-1452-4334-8BFD-9975C0498AB2}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
