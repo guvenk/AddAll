@@ -7,7 +7,7 @@
 		<Title>AddAll</Title>
 		<Authors>guvenkurt</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.5</Version>
+		<Version>1.0.6</Version>
 		<Description>Automates service registrations of your solution.</Description>
 		<PackageTags>di;ioc;dependencyinjection;aspnet;aspnetcore</PackageTags>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
