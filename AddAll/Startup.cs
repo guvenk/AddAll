@@ -32,6 +32,7 @@ namespace AddAll
 
             services.AddAllAsTransient();
 
+            //test github actions with v1.0.5 
 
             //var test1 = services
             //    .Where(x => x.ServiceType == typeof(ITestService))
