@@ -7,10 +7,10 @@
 		<Title>AddAll</Title>
 		<Authors>guvenkurt</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Version>1.0.7</Version>
+		<Version>1.0.8</Version>
 		<Description>Automates service registrations of your solution.</Description>
 		<PackageTags>di;ioc;dependencyinjection;aspnet;aspnetcore</PackageTags>
-		<PackageReadmeFile>..\README.md</PackageReadmeFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>icon.png</PackageIcon>
 		<RepositoryUrl>https://github.com/guvenk/AddAll</RepositoryUrl>
 	</PropertyGroup>
