@@ -6,6 +6,12 @@ namespace AddAll
 {
     public static class ServicesExtensions
     {
+        /// <summary>
+        /// Adds all services automatically as transient with a configurable options.
+        /// </summary>
+        /// <param name="services">IServiceCollection services.</param>
+        /// <param name="setupAction">Customizable configuration options.</param>
+        /// <returns>A Reference to IServiceCollection after the operation has completed.</returns>
         public static IServiceCollection AddAllAsTransient(
             this IServiceCollection services,
             Action<AddAllOptions> setupAction = null)

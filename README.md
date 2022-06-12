@@ -10,6 +10,8 @@ Automates registration of all services in your solution.
 
 > **_NOTE:_**  It only registers the interfaces with their implementations if they are both in the same assembly.
 
+> **_NOTE:_**  It also skips the services that are already registered with an implementation factory such as .AddHttpClient() registrations.
+
 
 
 ### Example Usage:
